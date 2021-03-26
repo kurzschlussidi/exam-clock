@@ -24,8 +24,8 @@ def main_page():
         exam_info = request.form.get('info')
         if False: # add checks
             return render_template('index.html',form=form, error = True)
-        exam_starttime = str(datetime.now())
-        exam_endtime = str(datetime.now() + timedelta(minutes=exam_duration))
+        exam_starttime = datetime.now().strftime("%H:%M")
+        exam_endtime = (datetime.now() + timedelta(minutes=exam_duration)).strftime("%H:%M")
         key = setData(exam_name, exam_starttime, exam_endtime, exam_info)
         return redirect('/<key>')
     else:
