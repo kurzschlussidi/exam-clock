@@ -1,30 +1,32 @@
-{% extends 'base.html' %}
-
-{% block content %}
+{% extends 'base.html' %} {% block content %}
 <div class="page-header">
     Prüfungs Uhr
 </div>
 <div class="jumbotron">
-<h3>Bitte die Daten der Prüfung eingeben!</h3><br>
-<form action="" method="post">
-    <table class="table">
-        <tr>
-            <th>{{ form.name.label }}</th>
-            <th>{{ form.name }}</th>
-        </tr>
-        <tr>
-            <th>{{ form.duration.label }}</th>
-            <th>{{ form.duration }}</th>
-        </tr>
-        <tr>
-            <th>{{ form.info.label }}</th>
-            <th>{{ form.info }}</th>
-        </tr>
-    </table>
-    <div>  <br></div>
-    <div>  <br></div>
-    <div>  <br></div>
-    <input type="submit" value="Jetzt Beginnen">
-</form>
+    <h3>Bitte die Daten der Prüfung eingeben!</h3><br>
+    <form action="" method="post">
+        <table class="table">
+            <tr>
+                <th>{{ form.name.label }}</th>
+                <th>{{ form.name }}</th>
+            </tr>
+            <tr>
+                <th>{{ form.duration.label }}</th>
+                <th>{{ form.duration }}</th>
+            </tr>
+            <tr>
+                <th>{{ form.info.label }}</th>
+                <th>{{ form.info }}</th>
+            </tr>
+            <tr>
+                <th>{{ form.show_remaining.label }}</th>
+                <th>{{ form.show_remaining }}</th>
+            </tr>
+        </table>
+        <div> <br></div>
+        <div> <br></div>
+        <div> <br></div>
+        <input type="submit" value="Jetzt Beginnen">
+    </form>
 </div>
 {% endblock %}

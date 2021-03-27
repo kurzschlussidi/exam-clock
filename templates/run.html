@@ -9,9 +9,13 @@
     <div id="end_time">Ende: {{ exam_endtime }}</div>
     <div id="live_clock">Uhrzeit</div>
     <div id="exam_info">{{ exam_info }}</div>
+    {% if show_remaining %}
     <div id="text_time_remaining">Verbleibende Bearbeitungszeit:
         <div id="time_remaining"></div>
     </div>
+    {% endif %}
+
+
 </div>
 <script src={{ url_for( 'static', filename='js/time.js' ) }}>
     startTime();
