@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, url_for, render_template
+from flask import Flask, request, redirect, url_for, render_template, send_from_directory
 from datetime import datetime, timedelta
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
@@ -6,6 +6,7 @@ from wtforms import StringField, IntegerField,SelectField
 import sqlite3
 import random
 import os
+import string
 
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -25,16 +26,22 @@ def main_page():
         if False: # add checks
             return render_template('index.html',form=form, error = True)
         exam_starttime = datetime.now().strftime("%H:%M")
-        exam_endtime = (datetime.now() + timedelta(minutes=exam_duration)).strftime("%H:%M")
+        exam_endtime = (datetime.now() + timedelta(minutes=int(exam_duration))).strftime("%H:%M")
         key = setData(exam_name, exam_starttime, exam_endtime, exam_info)
-        return redirect('/<key>')
+        return redirect(url_for("run", key=key))
     else:
         return render_template('index.html',form=form, error = False)
 
 @app.route('/<key>')
 def run(key):
+    if getData(key) == False:
+        return "Sadly the requested Key can't be found on the server..."
     (key, exam_name, exam_starttime, exam_endtime, exam_info) = getData(key)
     return render_template('run.html', exam_name = exam_name, exam_info = exam_info, exam_starttime = exam_starttime, exam_endtime = exam_endtime)
+
+@app.route('/favicon.ico') 
+def favicon(): 
+    return send_from_directory(os.path.join(app.root_path, 'static'), 'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 def checkTable():
     conn = sqlite3.connect(database_location)
@@ -62,7 +69,7 @@ def makeTable():
     conn.close()
     return
 
-def setData(exam_name, exam_duration, exam_info):
+def setData(exam_name, exam_starttime, exam_endtime, exam_info):
     conn = sqlite3.connect(database_location)
     c = conn.cursor()
     key = genKey()
@@ -77,7 +84,11 @@ def getData(key):
     conn = sqlite3.connect(database_location)
     c = conn.cursor()
     c.execute("SELECT * FROM main WHERE key=?", (key, ))
-    (key, exam_name, exam_starttime, exam_endtime, exam_info) = c.fetchone()
+    try:
+        (key, exam_name, exam_starttime, exam_endtime, exam_info) = c.fetchone()
+    except:
+        print("key not found" + key)
+        return False
     return (key, exam_name, exam_starttime, exam_endtime, exam_info)
 
 def isKey(key):
@@ -102,5 +113,5 @@ class ExamForm(FlaskForm):
 if __name__ == '__main__':
     if not checkTable():
         makeTable()
-    app.run(host="0.0.0.0", port=int("80"), debug=True)
+    app.run(host="0.0.0.0", port=int("8000"), debug=False)
     
