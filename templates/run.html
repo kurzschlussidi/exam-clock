@@ -1,16 +1,19 @@
-{% extends 'base.html' %}
-
-{% block content %}
+{% extends 'base.html' %} {% block content %}
 <div class="page-header">
     Prüfungs Uhr
     <a href="{{ url_for('main_page') }}" type=button class="btn btn.primary pull-right">Reset</a>
 </div>
-<div id = "time_field" class="jumbotron">
+<div id="time_field" class="jumbotron">
     <div id="exam_title">{{ exam_name }}</div>
     <div id="start_time">Beginn: {{ exam_starttime }}</div>
     <div id="end_time">Ende: {{ exam_endtime }}</div>
     <div id="live_clock">Uhrzeit</div>
-    <div id="text_time_remaining">Verbleibende Bearbeitungszeit: <div id="time_remaining"></div></div>
+    <div id="exam_info">{{ exam_info }}</div>
+    <div id="text_time_remaining">Verbleibende Bearbeitungszeit:
+        <div id="time_remaining"></div>
+    </div>
 </div>
-<script src={{ url_for('static', filename='js/time.js') }}> startTime();</script>
+<script src={{ url_for( 'static', filename='js/time.js' ) }}>
+    startTime();
+</script>
 {% endblock %}

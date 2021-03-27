@@ -1,26 +1,30 @@
-#time_field{
+#time_field {
     text-align: center;
 }
 
-#exam_title{
+#exam_title {
     font-size: 8vw;
 }
 
-#start_time{
+#start_time {
     font-size: 3vw;
     display: inline;
 }
 
-#end_time{
+#end_time {
     font-size: 3vw;
     display: inline;
     padding-left: 2cm;
 }
 
-#live_clock{
+#live_clock {
     font-size: 10vw;
 }
 
-#text_time_remaining{
-    font-size:3vw;
+#text_time_remaining {
+    font-size: 3vw;
+}
+
+#exam_info {
+    font-size: 3vw;
 }
