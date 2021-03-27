@@ -7,4 +7,4 @@ RUN cd exam-clock
 RUN pip install -r exam-clock/requirements.txt
 RUN mkdir data
 EXPOSE 8000
-CMD [ "python3", "reminder/app.py" ]
+CMD [ "python3", "exam-clock/app.py" ]
