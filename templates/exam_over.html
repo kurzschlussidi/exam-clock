@@ -1,0 +1,9 @@
+{% extends 'base.html' %} {% block content %}
+<div class="page-header">
+    Prüfungs Uhr
+    <a href="{{ url_for('main_page') }}" type=button class="btn btn.primary pull-right">Reset</a>
+</div>
+<div id="time_field" class="jumbotron">
+    <div id="timer_over_title">Die Prüfungszeit ist nun vorbei!</div>
+</div>
+{% endblock %}

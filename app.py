@@ -24,7 +24,7 @@ def main_page():
         exam_duration = request.form.get('duration')
         exam_info = request.form.get('info')
         show_remaining = request.form.get('show_remaining')
-        if False: # add checks
+        if not exam_name or not exam_duration or not exam_info: # add checks
             return render_template('index.html',form=form, error = True)
         exam_starttime = datetime.now().strftime("%H:%M")
         exam_endtime = (datetime.now() + timedelta(minutes=int(exam_duration))).strftime("%H:%M")
@@ -37,8 +37,12 @@ def main_page():
 def run(key):
     if getData(key) == False:
         return "Sadly the requested Key can't be found on the server..."
-     (key, exam_name, exam_starttime, exam_endtime, exam_info, show_remaining) = getData(key)
+    (key, exam_name, exam_starttime, exam_endtime, exam_info, show_remaining) = getData(key)
     return render_template('run.html', exam_name = exam_name, exam_info = exam_info, exam_starttime = exam_starttime, exam_endtime = exam_endtime, show_remaining = show_remaining)
+
+@app.route('/done')
+def exam_over():
+   return render_template('exam_over.html')
 
 @app.route('/favicon.ico') 
 def favicon(): 

@@ -5,6 +5,10 @@
 <div class="jumbotron">
     <h3>Bitte die Daten der Prüfung eingeben!</h3><br>
     <form action="" method="post">
+        {% if error %}
+                <div class="alert alert-warning">Bitte füllen Sie alle Felder aus!</div>
+        {% endif %}
+        
         <table class="table">
             <tr>
                 <th>{{ form.name.label }}</th>
