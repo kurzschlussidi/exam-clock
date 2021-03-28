@@ -10,7 +10,7 @@
     <div id="live_clock">Uhrzeit</div>
     <div id="exam_info">{{ exam_info }}</div>
     {% if show_remaining %}
-    <div id="text_time_remaining">Verbleibende Bearbeitungszeit:
+    <div id="text_time_remaining">Verbleibende Bearbeitungszeit: <br>
         <span id="time_remaining"></span>
         <script>
             window.appConfig = {
@@ -23,4 +23,5 @@
     {% endif %}
 </div>
 <script src={{ url_for( 'static', filename='js/time.js' ) }}></script>
+<
 {% endblock %}
