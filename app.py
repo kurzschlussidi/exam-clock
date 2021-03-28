@@ -24,7 +24,7 @@ def main_page():
         exam_duration = request.form.get('duration')
         exam_info = request.form.get('info')
         show_remaining = request.form.get('show_remaining')
-        if not exam_name or not exam_duration or not exam_info: # add checks
+        if not exam_name or not exam_duration: # add checks
             return render_template('index.html',form=form, error = True)
         exam_starttime = datetime.now().strftime("%H:%M")
         exam_endtime = (datetime.now() + timedelta(minutes=int(exam_duration))).strftime("%H:%M")
