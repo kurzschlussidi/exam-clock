@@ -15,6 +15,11 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'blaslasdjasndhjasbfa.bcghvasgdvasjhdbahdbashdasjhdbvz23be2e7wq768asfd867asfvas8f7638vr728'
 Bootstrap(app)
 
+@app.before_request
+def before_request():
+    if not checkTable():
+        makeTable()
+
 #Main Page
 @app.route('/', methods=["GET", "POST"])
 def main_page():
@@ -118,7 +123,4 @@ class ExamForm(FlaskForm):
     show_remaining = BooleanField('Verbleibende Zeit anzeigen?')
 
 if __name__ == '__main__':
-    if not checkTable():
-        makeTable()
     app.run(host="0.0.0.0", port=int("8000"), debug=False)
-    

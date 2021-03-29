@@ -3,8 +3,9 @@ ADD static exam-clock/static
 ADD templates exam-clock/templates
 ADD requirements.txt exam-clock/requirements.txt
 ADD app.py exam-clock/app.py
-RUN cd exam-clock
-RUN pip install -r exam-clock/requirements.txt
+ADD app.ini exam-clock/app.ini
+WORKDIR /exam-clock/
+RUN pip install -r requirements.txt
 RUN mkdir data
 EXPOSE 8000
-CMD [ "python3", "exam-clock/app.py" ]
+CMD ["uwsgi", "app.ini"]
