@@ -28,7 +28,5 @@ function remainingTime(end_time_str, show_remaining)
             window.location.replace(appConfig.redirect_url);
         }
     }
-    
-
-    t=setTimeout(function(){remainingTime(end_time_str)},500);
+    t=setTimeout(function(){remainingTime(appConfig.end_time, appConfig.show_remaining)},500);
 }
