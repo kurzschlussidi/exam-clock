@@ -1,5 +1,5 @@
-startTime();
-function startTime()
+startTime(appConfig.show_seconds);
+function startTime(show_seconds)
     {
     var today=new Date();
     var h=today.getHours();
@@ -9,8 +9,12 @@ function startTime()
     h=checkTime(h);
     m=checkTime(m);
     s=checkTime(s);
-    document.getElementById("live_clock").innerHTML=h+":"+m+":"+s;
-    t=setTimeout(function(){startTime()},500);
+    if (show_seconds=='y') {
+      document.getElementById("live_clock").innerHTML=h+":"+m+":"+s;
+    } else {
+      document.getElementById("live_clock").innerHTML=h+":"+m;
+    }
+    t=setTimeout(function(){startTime(show_seconds)},500);
     }
     
     function checkTime(i)

@@ -5,25 +5,29 @@
 </div>
 <div id="time_field" class="jumbotron">
     <div id="exam_title">{{ exam_name }}</div>
-    <div id="start_time">Beginn: {{ exam_starttime }}</div>
-    <div id="end_time">Ende: {{ exam_endtime }}</div>
+    <div id="start_time">Beginn: {{ exam_starttime[:-3] }}</div>
+    <div id="end_time">Ende: {{ exam_endtime[:-3] }}</div>
     <div id="live_clock">Uhrzeit</div>
     <div id="exam_info">{{ exam_info }}</div>
     {% if show_remaining %}
     <div id="text_time_remaining">Verbleibende Bearbeitungszeit: <br>
         <span id="time_remaining"></span>
-        <script>
-            window.appConfig = {
-                end_time: '{{ exam_endtime }}',
-                redirect_url: "{{ url_for('exam_over') }}"
-            }
-        </script>    
-        <script src={{ url_for( 'static', filename='js/remaining.js' ) }}></script>
     </div>
     {% endif %}
+    
+
 </div>
 <!-- The actual snackbar -->
 <div id="snackbar">F11 Taste drücken für Vollbild</div>
+<script>
+    window.appConfig = {
+        end_time: '{{ exam_endtime }}',
+        redirect_url: "{{ url_for('exam_over') }}",
+        show_seconds: '{{ show_seconds }}',
+        show_remaining: '{{ show_remaining }}'
+    }
+</script>    
+<script src={{ url_for( 'static', filename='js/remaining.js' ) }}></script>
 <script src={{ url_for( 'static', filename='js/time.js' ) }}></script>
 <script src={{ url_for( 'static', filename='js/snackbar.js' ) }}></script>
 {% endblock %}

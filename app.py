@@ -29,11 +29,12 @@ def main_page():
         exam_duration = request.form.get('duration')
         exam_info = request.form.get('info')
         show_remaining = request.form.get('show_remaining')
+        show_seconds = request.form.get('show_seconds')
         if not exam_name or not exam_duration: # add checks
             return render_template('index.html',form=form, error = True)
-        exam_starttime = datetime.now().strftime("%H:%M")
-        exam_endtime = (datetime.now() + timedelta(minutes=int(exam_duration))).strftime("%H:%M")
-        key = setData(exam_name, exam_starttime, exam_endtime, exam_info, show_remaining)
+        exam_starttime = datetime.now().strftime("%H:%M:%S")
+        exam_endtime = (datetime.now() + timedelta(minutes=int(exam_duration))).strftime("%H:%M:%S")
+        key = setData(exam_name, exam_starttime, exam_endtime, exam_info, show_remaining, show_seconds)
         return redirect(url_for("run", key=key))
     else:
         return render_template('index.html',form=form, error = False)
@@ -42,8 +43,8 @@ def main_page():
 def run(key):
     if getData(key) == False:
         return "Sadly the requested Key can't be found on the server..."
-    (key, exam_name, exam_starttime, exam_endtime, exam_info, show_remaining) = getData(key)
-    return render_template('run.html', exam_name = exam_name, exam_info = exam_info, exam_starttime = exam_starttime, exam_endtime = exam_endtime, show_remaining = show_remaining)
+    (key, exam_name, exam_starttime, exam_endtime, exam_info, show_remaining, show_seconds) = getData(key)
+    return render_template('run.html', exam_name = exam_name, exam_info = exam_info, exam_starttime = exam_starttime, exam_endtime = exam_endtime, show_remaining = show_remaining, show_seconds = show_seconds)
 
 @app.route('/done')
 def exam_over():
@@ -74,19 +75,20 @@ def makeTable():
                 exam_starttime ,
                 exam_endtime text,
                 exam_info text,
-                show_remaining integer
+                show_remaining integer,
+                show_seconds integer
                 )""")
     conn.commit()
     conn.close()
     return
 
-def setData(exam_name, exam_starttime, exam_endtime, exam_info, show_remaining):
+def setData(exam_name, exam_starttime, exam_endtime, exam_info, show_remaining, show_seconds):
     conn = sqlite3.connect(database_location)
     c = conn.cursor()
     key = genKey()
     while isKey(key):
         key = genKey()
-    c.execute("INSERT INTO main VALUES (?, ?, ?, ?, ?, ?)",(key, exam_name, exam_starttime, exam_endtime, exam_info, show_remaining))
+    c.execute("INSERT INTO main VALUES (?, ?, ?, ?, ?, ?, ?)",(key, exam_name, exam_starttime, exam_endtime, exam_info, show_remaining, show_seconds))
     conn.commit()
     conn.close()
     return key
@@ -96,11 +98,11 @@ def getData(key):
     c = conn.cursor()
     c.execute("SELECT * FROM main WHERE key=?", (key, ))
     try:
-        (key, exam_name, exam_starttime, exam_endtime, exam_info, show_remaining) = c.fetchone()
+        (key, exam_name, exam_starttime, exam_endtime, exam_info, show_remaining, show_seconds) = c.fetchone()
     except:
         print("key not found" + key)
         return False
-    return (key, exam_name, exam_starttime, exam_endtime, exam_info, show_remaining)
+    return (key, exam_name, exam_starttime, exam_endtime, exam_info, show_remaining, show_seconds)
 
 def isKey(key):
     conn = sqlite3.connect(database_location)
@@ -121,6 +123,7 @@ class ExamForm(FlaskForm):
     duration = SelectField('Dauer der Prüfung (in Minuten): ',choices=[60,90,120,150,180])
     info = StringField('Zusätzliche Info (optional): ')
     show_remaining = BooleanField('Verbleibende Zeit anzeigen?')
+    show_seconds = BooleanField('Sekunden bei der Uhrzeit anzeigen?')
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=int("8000"), debug=False)
