@@ -10,12 +10,12 @@ function remainingTime(end_time_str, show_remaining)
     end_time.setSeconds(end_times[2]);
     time_diff = (end_time - live_time) / 60000;
     if (show_remaining == 'y') {
-        if (time_diff > 1) { // A lot of time left
+        if (Math.floor(time_diff)>=2) { // A lot of time left
             time_diff = Math.floor(time_diff)
             document.getElementById("time_remaining").innerHTML=time_diff + ' Minuten';
-        } else if (Math.floor(time_diff) == 1) { // between 1 and 2 minutes left
-            time_diff = Math.floor(time_diff)
-            document.getElementById("time_remaining").innerHTML=time_diff + ' Minute';
+//        } else if (Math.floor(time_diff) == 1) { // between 1 and 2 minutes left
+//            time_diff = Math.floor(time_diff)
+//            document.getElementById("time_remaining").innerHTML=time_diff + ' Minute';
         } else if (time_diff > 0){ //under a minute left
             time_diff = Math.floor(time_diff*60);
             document.getElementById("time_remaining").innerHTML=time_diff + ' Sekunden';
