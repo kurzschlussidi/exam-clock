@@ -14,7 +14,7 @@ function startTime(show_seconds)
     } else {
       document.getElementById("live_clock").innerHTML=h+":"+m;
     }
-    t=setTimeout(function(){startTime(show_seconds)},500);
+    t=setTimeout(function(){startTime(show_seconds)},100);
     }
     
     function checkTime(i)
