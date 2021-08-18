@@ -9,6 +9,9 @@
         <div id="live_clock">Uhrzeit</div>
         <div id="exam_info">{{ exam_info }}</div>    
     </div>
+    {% if error %}
+        <div class="alert alert-warning">Bitte überprüfen Sie Ihre Werte!</div>
+    {% endif %}
     <form action="" method="post">
         <div class="row time_inputs">
             <div class="col-lg-6">

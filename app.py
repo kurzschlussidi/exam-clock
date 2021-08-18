@@ -52,12 +52,16 @@ def run(key):
                 try:
                     start_hour = int(request.form.get('start_hour'))
                     start_minute = int(request.form.get('start_minute'))
+                    if start_hour > 23 or start_hour < 0:
+                        raise Exception
+                    if start_minute > 59 or start_minute < 0:
+                        raise Exception
                 except:
-                    return render_template('start_view.html',exam_name = exam_name, exam_info = exam_info)
+                    return render_template('start_view.html',exam_name = exam_name, exam_info = exam_info, error = True)
                 exam_starttime = datetime.now().replace(hour=start_hour,minute=start_minute,second=0).strftime("%H:%M:%S")
                 updateStarttime(key=key, exam_starttime=exam_starttime)
             return redirect(url_for('run', key = key))
-        return render_template('start_view.html',exam_name = exam_name, exam_info = exam_info)
+        return render_template('start_view.html',exam_name = exam_name, exam_info = exam_info, error = False)
     else:
         start_hour, start_minute, start_second = exam_starttime.split(':')
         exam_endtime = (datetime.now().replace(hour=int(start_hour), minute=int(start_minute), second=int(start_second)) + timedelta(minutes=int(exam_duration))).strftime("%H:%M:%S")
