@@ -1,0 +1,36 @@
+{% extends 'base.html' %} {% block content %}
+<div class="page-header">
+    Prüfungs Uhr
+    <a href="{{ url_for('main_page') }}" type=button class="btn btn.primary pull-right">Reset</a>
+</div>
+<div class="jumbotron">
+    <div id="time_field" class="jumbotron">
+        <div id="exam_title">{{ exam_name }}</div>
+        <div id="live_clock">Uhrzeit</div>
+        <div id="exam_info">{{ exam_info }}</div>    
+    </div>
+    <form action="" method="post">
+        <div class="row time_inputs">
+            <div class="col-lg-6">
+                <input type="number"  name="start_hour" placeholder="Stunde" class="time_input">:
+                <input type="number"  name="start_minute" placeholder="Minute" class="time_input">
+            </div>
+            <div class="col-lg-6"></div>
+        </div>
+        <div class="submit_buttons row">
+            <div class="col-lg-6">
+                <input type="submit" value = "Startzeit setzten" name="submit">
+            </div>
+            <div class="col-lg-6">
+                <input type="submit" value = "Jetzt Beginnen" name="submit">
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    window.appConfig = {
+        show_seconds: '{{ show_seconds }}'
+    }
+</script>    
+<script src={{ url_for( 'static', filename='js/time.js' ) }}></script>
+{% endblock %}

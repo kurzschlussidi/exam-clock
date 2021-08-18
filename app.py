@@ -32,19 +32,36 @@ def main_page():
         show_seconds = request.form.get('show_seconds')
         if not exam_name or not exam_duration: # add checks
             return render_template('index.html',form=form, error = True)
-        exam_starttime = datetime.now().strftime("%H:%M:%S")
-        exam_endtime = (datetime.now() + timedelta(minutes=int(exam_duration))).strftime("%H:%M:%S")
-        key = setData(exam_name, exam_starttime, exam_endtime, exam_info, show_remaining, show_seconds)
+        exam_starttime = 'None'
+        key = setData(exam_name, exam_starttime, exam_duration, exam_info, show_remaining, show_seconds)
         return redirect(url_for("run", key=key))
     else:
         return render_template('index.html',form=form, error = False)
 
-@app.route('/<key>')
+@app.route('/<key>', methods=["GET", "POST"])
 def run(key):
     if getData(key) == False:
         return "Sadly the requested Key can't be found on the server..."
-    (key, exam_name, exam_starttime, exam_endtime, exam_info, show_remaining, show_seconds) = getData(key)
-    return render_template('run.html', exam_name = exam_name, exam_info = exam_info, exam_starttime = exam_starttime, exam_endtime = exam_endtime, show_remaining = show_remaining, show_seconds = show_seconds)
+    (key, exam_name, exam_starttime, exam_duration, exam_info, show_remaining, show_seconds) = getData(key)
+    if exam_starttime == 'None':
+        if request.method == "POST":
+            if request.form.get('submit') == 'Jetzt Beginnen':
+                exam_starttime = datetime.now().strftime("%H:%M:%S")
+                updateStarttime(key=key, exam_starttime=exam_starttime)
+            else:
+                try:
+                    start_hour = int(request.form.get('start_hour'))
+                    start_minute = int(request.form.get('start_minute'))
+                except:
+                    return render_template('start_view.html',exam_name = exam_name, exam_info = exam_info)
+                exam_starttime = datetime.now().replace(hour=start_hour,minute=start_minute,second=0).strftime("%H:%M:%S")
+                updateStarttime(key=key, exam_starttime=exam_starttime)
+            return redirect(url_for('run', key = key))
+        return render_template('start_view.html',exam_name = exam_name, exam_info = exam_info)
+    else:
+        start_hour, start_minute, start_second = exam_starttime.split(':')
+        exam_endtime = (datetime.now().replace(hour=int(start_hour), minute=int(start_minute), second=int(start_second)) + timedelta(minutes=int(exam_duration))).strftime("%H:%M:%S")
+        return render_template('run.html', exam_name = exam_name, exam_info = exam_info, exam_starttime = exam_starttime, exam_endtime = exam_endtime, show_remaining = show_remaining, show_seconds = show_seconds)
 
 @app.route('/done')
 def exam_over():
@@ -72,8 +89,8 @@ def makeTable():
     c.execute("""CREATE TABLE main (
                 key text,
                 exam_name text,
-                exam_starttime ,
-                exam_endtime text,
+                exam_starttime text,
+                exam_duration integer,
                 exam_info text,
                 show_remaining integer,
                 show_seconds integer
@@ -82,27 +99,35 @@ def makeTable():
     conn.close()
     return
 
-def setData(exam_name, exam_starttime, exam_endtime, exam_info, show_remaining, show_seconds):
+def setData(exam_name, exam_starttime, exam_duration, exam_info, show_remaining, show_seconds):
     conn = sqlite3.connect(database_location)
     c = conn.cursor()
     key = genKey()
     while isKey(key):
         key = genKey()
-    c.execute("INSERT INTO main VALUES (?, ?, ?, ?, ?, ?, ?)",(key, exam_name, exam_starttime, exam_endtime, exam_info, show_remaining, show_seconds))
+    c.execute("INSERT INTO main VALUES (?, ?, ?, ?, ?, ?, ?)",(key, exam_name, exam_starttime, exam_duration, exam_info, show_remaining, show_seconds))
     conn.commit()
     conn.close()
     return key
+
+def updateStarttime(key,exam_starttime):
+    conn = sqlite3.connect(database_location)
+    c = conn.cursor()
+    c.execute("UPDATE main SET exam_starttime = ? WHERE key = ?",(exam_starttime,key))
+    conn.commit()
+    conn.close()
+
 
 def getData(key):
     conn = sqlite3.connect(database_location)
     c = conn.cursor()
     c.execute("SELECT * FROM main WHERE key=?", (key, ))
     try:
-        (key, exam_name, exam_starttime, exam_endtime, exam_info, show_remaining, show_seconds) = c.fetchone()
+        (key, exam_name, exam_starttime, exam_duration, exam_info, show_remaining, show_seconds) = c.fetchone()
     except:
         print("key not found" + key)
         return False
-    return (key, exam_name, exam_starttime, exam_endtime, exam_info, show_remaining, show_seconds)
+    return (key, exam_name, exam_starttime, exam_duration, exam_info, show_remaining, show_seconds)
 
 def isKey(key):
     conn = sqlite3.connect(database_location)

@@ -39,6 +39,19 @@
     font-size: 6vw;
 }
 
+.time_input{
+    width: 100px;
+}
+
+.submit_buttons{
+    padding-top: 20px;
+    text-align: center;
+}
+
+.time_inputs{
+    text-align: center;
+}
+
 /* snackbar addon */
 
  /* The snackbar - position it at the bottom and in the middle of the screen */
