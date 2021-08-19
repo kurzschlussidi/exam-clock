@@ -3,12 +3,11 @@
     Prüfungs Uhr
     <a href="{{ url_for('main_page') }}" type=button class="btn btn.primary pull-right">Reset</a>
 </div>
-<div class="jumbotron">
-    <div id="time_field" class="jumbotron">
-        <div id="exam_title"> <div>{{ exam_name }}</div>
-        <div id="live_clock">Uhrzeit</div>
-        <div id="exam_info">{{ exam_info }}</div>    
-    </div>
+<div id="time_field" class="jumbotron">
+    <div id="exam_title"> <div>{{ exam_name }}</div></div>
+    <div id="live_clock">Uhrzeit</div>
+    <div id="exam_info">{{ exam_info }}</div>    
+
     {% if error %}
         <div class="alert alert-warning">Bitte überprüfen Sie Ihre Werte!</div>
     {% endif %}
@@ -29,6 +28,7 @@
             </div>
         </div>
     </form>
+</div>
 </div>
 <script>
     window.appConfig = {

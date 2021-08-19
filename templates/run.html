@@ -4,7 +4,7 @@
     <a href="{{ url_for('main_page') }}" type=button class="btn btn.primary pull-right">Reset</a>
 </div>
 <div id="time_field" class="jumbotron">
-    <div id="exam_title">{{ exam_name }}</div>
+    <div id="exam_title"><div>{{ exam_name }}</div></div>
     <div id="start_time">Beginn: {{ exam_starttime[:-3] }}</div>
     <div id="end_time">Ende: {{ exam_endtime[:-3] }}</div>
     <div id="live_clock">Uhrzeit</div>
@@ -26,7 +26,22 @@
         show_seconds: '{{ show_seconds }}',
         show_remaining: '{{ show_remaining }}'
     }
-</script>    
+</script>
+<script>
+$(document).ready(function () {
+    resize_to_fit();
+});
+
+function resize_to_fit(){
+    var fontsize = $('div#exam_title div').css('font-size');
+    $('div#exam_title div').css('fontSize', parseFloat(fontsize) - 1);
+    console.log(fontsize);
+
+    if($('div#exam_title div').height() >= $('div#exam_title').height()){
+        resize_to_fit();
+    }
+}
+</script>
 <script src={{ url_for( 'static', filename='js/remaining.js' ) }}></script>
 <script src={{ url_for( 'static', filename='js/time.js' ) }}></script>
 <script src={{ url_for( 'static', filename='js/snackbar.js' ) }}></script>
