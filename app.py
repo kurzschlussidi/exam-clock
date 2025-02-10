@@ -7,13 +7,15 @@ import sqlite3
 import random
 import os
 import string
+import secrets
+
 
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 database_location = dir_path + "/data/database.db"
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'blaslasdjasndhjasbfa.bcghvasgdvasjhdbahdbashdasjhdbvz23be2e7wq768asfd867asfvas8f7638vr728'
-Bootstrap(app)
+secret_key = secrets.token_hex(16)
+app.config['SECRET_KEY'] = secret_key
 
 @app.before_request
 def before_request():
