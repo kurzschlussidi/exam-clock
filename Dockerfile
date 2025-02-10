@@ -1,4 +1,4 @@
-FROM python:3
+FROM python:3.12.3
 ADD static exam-clock/static
 ADD templates exam-clock/templates
 ADD requirements.txt exam-clock/requirements.txt
