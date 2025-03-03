@@ -23,7 +23,10 @@ function remainingTime(end_time_str, show_remaining)
             document.getElementById("time_remaining").innerHTML=time_diff + ' Sekunden';
         } else { //time is over
             document.getElementById("time_remaining").innerHTML='Prüfung Vorbei';
-            window.location.replace(appConfig.redirect_url);
+            confetti();
+            setTimeout(function() {
+                window.location.replace(appConfig.redirect_url);
+            }, 5000); // Wait 5 seconds before redirecting
         }
     } else {
         if (time_diff < 0) {
@@ -31,4 +34,30 @@ function remainingTime(end_time_str, show_remaining)
         }
     }
     t=setTimeout(function(){remainingTime(appConfig.end_time, appConfig.show_remaining)},100);
+}
+
+function confetti() {
+    var end = Date.now() + (4 * 1000); // Run confetti for 4 seconds
+    var colors = ['#bb0000', '#ffffff'];
+
+    (function frame() {
+        confetti({
+            particleCount: 2,
+            angle: 60,
+            spread: 55,
+            origin: { x: 0 },
+            colors: colors
+        });
+        confetti({
+            particleCount: 2,
+            angle: 120,
+            spread: 55,
+            origin: { x: 1 },
+            colors: colors
+        });
+
+        if (Date.now() < end) {
+            requestAnimationFrame(frame);
+        }
+    })();
 }

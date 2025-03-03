@@ -151,7 +151,7 @@ def genKey():
 
 class ExamForm(FlaskForm):
     name = StringField('Name der Prüfung: ')
-    duration = SelectField('Dauer der Prüfung (in Minuten): ',choices=[60,90,120,150,180])
+    duration = SelectField('Dauer der Prüfung (in Minuten): ',choices=[60, 90, 120, 150, 180])
     info = StringField('Zusätzliche Info (optional): ')
     show_remaining = BooleanField('Verbleibende Zeit anzeigen?')
     show_seconds = BooleanField('Sekunden bei der Uhrzeit anzeigen?')

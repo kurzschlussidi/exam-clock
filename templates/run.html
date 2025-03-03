@@ -14,11 +14,10 @@
         <span id="time_remaining"></span>
     </div>
     {% endif %}
-    
-
 </div>
 <!-- The actual snackbar -->
 <div id="snackbar">F11 Taste drücken für Vollbild</div>
+<canvas id="confetti-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;"></canvas>
 <script>
     window.appConfig = {
         end_time: '{{ exam_endtime }}',
@@ -45,4 +44,5 @@ function resize_to_fit(){
 <script src={{ url_for( 'static', filename='js/remaining.js' ) }}></script>
 <script src={{ url_for( 'static', filename='js/time.js' ) }}></script>
 <script src={{ url_for( 'static', filename='js/snackbar.js' ) }}></script>
+<script src={{ url_for( 'static', filename='js/confetti.js' ) }}></script>
 {% endblock %}
