@@ -11,6 +11,7 @@ This a a small python script spinning up an Website on port 8000, which displays
 
     git clone https://github.com/kurzschlussidi/exam-clock.git
     cd exam-clock
+    mkdir data
     pip install -r requirements.txt
     python app.py
 

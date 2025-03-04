@@ -1,6 +1,6 @@
-remainingTime(appConfig.end_time, appConfig.show_remaining);
+remainingTime(appConfig.end_time, appConfig.show_remaining, appConfig.show_confetti);
 
-function remainingTime(end_time_str, show_remaining)
+function remainingTime(end_time_str, show_remaining, show_confetti)
 {
     end_times = end_time_str.split(':')
     var end_time = new Date();
@@ -23,7 +23,9 @@ function remainingTime(end_time_str, show_remaining)
             document.getElementById("time_remaining").innerHTML=time_diff + ' Sekunden';
         } else { //time is over
             document.getElementById("time_remaining").innerHTML='Prüfung Vorbei';
-            confetti();
+            if (show_confetti == 'y') {
+                confetti();
+            }
             setTimeout(function() {
                 window.location.replace(appConfig.redirect_url);
             }, 5000); // Wait 5 seconds before redirecting

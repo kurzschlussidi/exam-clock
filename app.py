@@ -32,10 +32,11 @@ def main_page():
         exam_info = request.form.get('info')
         show_remaining = request.form.get('show_remaining')
         show_seconds = request.form.get('show_seconds')
+        show_confetti = request.form.get('show_confetti')
         if not exam_name or not exam_duration: # add checks
             return render_template('index.html',form=form, error = True)
         exam_starttime = 'None'
-        key = setData(exam_name, exam_starttime, exam_duration, exam_info, show_remaining, show_seconds)
+        key = setData(exam_name, exam_starttime, exam_duration, exam_info, show_remaining, show_seconds, show_confetti)
         return redirect(url_for("run", key=key))
     else:
         return render_template('index.html',form=form, error = False)
@@ -44,7 +45,7 @@ def main_page():
 def run(key):
     if getData(key) == False:
         return "Sadly the requested Key can't be found on the server..."
-    (key, exam_name, exam_starttime, exam_duration, exam_info, show_remaining, show_seconds) = getData(key)
+    (key, exam_name, exam_starttime, exam_duration, exam_info, show_remaining, show_seconds, show_confetti) = getData(key)
     if exam_starttime == 'None':
         if request.method == "POST":
             if request.form.get('submit') == 'Jetzt Beginnen':
@@ -67,7 +68,7 @@ def run(key):
     else:
         start_hour, start_minute, start_second = exam_starttime.split(':')
         exam_endtime = (datetime.now().replace(hour=int(start_hour), minute=int(start_minute), second=int(start_second)) + timedelta(minutes=int(exam_duration))).strftime("%H:%M:%S")
-        return render_template('run.html', exam_name = exam_name, exam_info = exam_info, exam_starttime = exam_starttime, exam_endtime = exam_endtime, show_remaining = show_remaining, show_seconds = show_seconds)
+        return render_template('run.html', exam_name = exam_name, exam_info = exam_info, exam_starttime = exam_starttime, exam_endtime = exam_endtime, show_remaining = show_remaining, show_seconds = show_seconds, show_confetti = show_confetti)
 
 @app.route('/done')
 def exam_over():
@@ -99,19 +100,20 @@ def makeTable():
                 exam_duration integer,
                 exam_info text,
                 show_remaining integer,
-                show_seconds integer
+                show_seconds integer,
+                show_confetti integer
                 )""")
     conn.commit()
     conn.close()
     return
 
-def setData(exam_name, exam_starttime, exam_duration, exam_info, show_remaining, show_seconds):
+def setData(exam_name, exam_starttime, exam_duration, exam_info, show_remaining, show_seconds, show_confetti):
     conn = sqlite3.connect(database_location)
     c = conn.cursor()
     key = genKey()
     while isKey(key):
         key = genKey()
-    c.execute("INSERT INTO main VALUES (?, ?, ?, ?, ?, ?, ?)",(key, exam_name, exam_starttime, exam_duration, exam_info, show_remaining, show_seconds))
+    c.execute("INSERT INTO main VALUES (?, ?, ?, ?, ?, ?, ?, ?)",(key, exam_name, exam_starttime, exam_duration, exam_info, show_remaining, show_seconds, show_confetti))
     conn.commit()
     conn.close()
     return key
@@ -129,11 +131,11 @@ def getData(key):
     c = conn.cursor()
     c.execute("SELECT * FROM main WHERE key=?", (key, ))
     try:
-        (key, exam_name, exam_starttime, exam_duration, exam_info, show_remaining, show_seconds) = c.fetchone()
+        (key, exam_name, exam_starttime, exam_duration, exam_info, show_remaining, show_seconds, show_confetti) = c.fetchone()
     except:
         print("key not found" + key)
         return False
-    return (key, exam_name, exam_starttime, exam_duration, exam_info, show_remaining, show_seconds)
+    return (key, exam_name, exam_starttime, exam_duration, exam_info, show_remaining, show_seconds, show_confetti)
 
 def isKey(key):
     conn = sqlite3.connect(database_location)
@@ -155,6 +157,7 @@ class ExamForm(FlaskForm):
     info = StringField('Zusätzliche Info (optional): ')
     show_remaining = BooleanField('Verbleibende Zeit anzeigen?')
     show_seconds = BooleanField('Sekunden bei der Uhrzeit anzeigen?')
+    show_confetti = BooleanField('Konfetti nach der Prüfungszeit anzeigen?')
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=int("8000"), debug=False)
