@@ -35,7 +35,7 @@ function remainingTime(end_time_str, show_remaining, show_confetti)
             window.location.replace(appConfig.redirect_url);
         }
     }
-    t=setTimeout(function(){remainingTime(appConfig.end_time, appConfig.show_remaining)},100);
+    t=setTimeout(function(){remainingTime(appConfig.end_time, appConfig.show_remaining,appConfig.show_confetti)},100);
 }
 
 function confetti() {
