@@ -10,31 +10,35 @@ function remainingTime(end_time_str, show_remaining, show_confetti)
     end_time.setSeconds(end_times[2]);
     end_time.setMilliseconds(0);
     time_diff = (end_time - live_time) / 1000;
-    if (show_remaining == 'y') {
-        if (Math.floor(time_diff)>=120) { // A lot of time left
-            time_diff = Math.floor(time_diff/60)
-            document.getElementById("time_remaining").innerHTML=time_diff + ' Minuten';
-//        } else if (Math.floor(time_diff) == 1) { // between 1 and 2 minutes left
-//            time_diff = Math.floor(time_diff)
-//            document.getElementById("time_remaining").innerHTML=time_diff + ' Minute';
-        } else if (time_diff > 0){ //under two minutes left
-            time_diff = Math.floor(time_diff);
-            console.log(time_diff);
-            document.getElementById("time_remaining").innerHTML=time_diff + ' Sekunden';
-        } else { //time is over
+
+    var expired = (time_diff <= 0);
+
+    if (expired) { // time is over
+        if (show_remaining == 'y') {
             document.getElementById("time_remaining").innerHTML='Prüfung Vorbei';
-            if (show_confetti == 'y') {
-                confetti();
-            }
+        }
+        if (show_confetti == 'y') {
+            confetti();
             setTimeout(function() {
                 window.location.replace(appConfig.redirect_url);
-            }, 5000); // Wait 5 seconds before redirecting
-        }
-    } else {
-        if (time_diff < 0) {
+            }, 5000);
+        }else {
+            //no confetti is shown -> redirect immediately
             window.location.replace(appConfig.redirect_url);
         }
+    } else {
+        if (show_remaining == 'y') {
+            if (Math.floor(time_diff)>=120) { // A lot of time left
+                time_diff = Math.floor(time_diff/60)
+                document.getElementById("time_remaining").innerHTML=time_diff + ' Minuten';
+            } else if (time_diff > 0){ //under two minutes left
+                time_diff = Math.floor(time_diff);
+                console.log(time_diff);
+                document.getElementById("time_remaining").innerHTML=time_diff + ' Sekunden';
+            }
+        }
     }
+
     t=setTimeout(function(){remainingTime(appConfig.end_time, appConfig.show_remaining,appConfig.show_confetti)},100);
 }
 
